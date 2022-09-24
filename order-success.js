@@ -18,7 +18,7 @@
         console.error(JSON.parse(response.message).error.message, 'orders/info error')
       } else {
         $('.order-number').text(`№${response.order_number}`);
-        $('.success').addClass('done');
+        $('.success-form-js').addClass('done');
       }
     })
 })();

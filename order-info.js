@@ -4,6 +4,7 @@
 (function () {
   const urlParams = new URLSearchParams(window.location.search);
   const access_key = urlParams.get('access_key');
+  const language = 'ru';
 
   const getCoordinates = async (address) => {
     const geocoder = new google.maps.Geocoder();
@@ -25,15 +26,24 @@
       if (response.code === 0) {
         console.error(JSON.parse(response.message).error.message, 'orders/info error')
       } else {
+        $('.success-form-js').addClass('done');
         $('.order-number').text(`№${response['order_number']}`);
-        $('.order-status-type').text(response['order_status']['en']);
-        $('.payment-type').text(response.payment_type['en']);
-        $('.order-from').text(response.from);
-        $('.order-to').text(response.to);
+        $('.order-status-type').text(response['order_status'][language]);
+        $('.payment-type').text(response.payment_type[language]);
+        $('.order-from').text(response.from[language]);
+        $('.order-to').text(response.to[language]);
         $('.car-type').text(response.car.type);
-        $('.order-duration').text(response.duration);
         $('.order-passengers').text(response.passengers.adult);
 
+        if (response.duration) {
+          $('.order-duration').text(response.duration);
+          $('.order-duration-section').css('display', 'block');
+          $('.order-route-length-section').css('display', 'none');
+        } else {
+          $('.order-route-length').text(`${response.route_length} км`);
+          $('.order-duration-section').css('display', 'none');
+          $('.order-route-length-section').css('display', 'block');
+        }
         // date
         const myDate = new Date(response.at);
         const date = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);

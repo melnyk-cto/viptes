@@ -240,6 +240,9 @@
       let serialize;
 
       const data = {
+        "from": {"longitude": '', "latitude": ''},
+        "to": {"longitude": '', "latitude": ''},
+        "duration": 0,
         "at": at,
         "passengers": {
           "adult": adultsInput,
@@ -266,7 +269,7 @@
         await getCoordinates(toInput).then(response => to = response).catch(() => to = null);
         await getCoordinates(fromToInput).then(response => fromTo = response).catch(() => fromTo = null);
         data.from = {"longitude": `${fromTo.lng}`, "latitude": `${fromTo.lat}`};
-          data.to = {"longitude": `${to.lng}`, "latitude": `${to.lat}`};
+        data.to = {"longitude": `${to.lng}`, "latitude": `${to.lat}`};
         serialize = `
         ${fromTo.lat && `from_latitude=${fromTo.lat}`}
         ${fromTo.lng && `&from_longitude=${fromTo.lng}`}
@@ -290,7 +293,7 @@
         const durationInput = $('[name="Hours"]').val();
         await getCoordinates(fromDurationInput).then(response => fromDuration = response).catch(() => fromDuration = null);
         data.from = {"longitude": fromDuration.lng, "latitude": fromDuration.lat};
-        data.duration = durationInput;
+        data.duration = Number(durationInput);
         serialize = `
         ${fromDuration.lat && `from_latitude=${fromDuration.lat}`}
         ${fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
