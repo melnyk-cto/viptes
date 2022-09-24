@@ -26,12 +26,14 @@
       if (response.code === 0) {
         console.error(JSON.parse(response.message).error.message, 'orders/info error')
       } else {
+        const responseFrom = response.from[language];
+        const responseTo = response.to[language];
         $('.success-form-js').addClass('done');
         $('.order-number').text(`№${response['order_number']}`);
         $('.order-status-type').text(response['order_status'][language]);
         $('.payment-type').text(response.payment_type[language]);
-        $('.order-from').text(response.from[language]);
-        $('.order-to').text(response.to[language]);
+        $('.order-from').text(responseFrom);
+        $('.order-to').text(responseTo);
         $('.car-type').text(response.car.type);
         $('.order-passengers').text(response.passengers.adult);
 
@@ -60,7 +62,7 @@
           (luggage.hand_luggage && `Ручная кладь - ${luggage.hand_luggage}, `) +
           (luggage.snowboard && `Сноуборд - ${luggage.snowboard}, `) +
           (luggage.suitcase && `Чемодан/сумка - ${luggage.suitcase}, `) +
-          (luggage.wheechair && `Инвалидное кресло - ${luggage.wheechair}, `) +
+          (luggage.wheelchair && `Инвалидное кресло - ${luggage.wheelchair}, `) +
           (luggage.skis && `Лыжи - ${luggage.skis}`)
         $('.order-luggage').text(newLuggage);
 
@@ -69,18 +71,17 @@
 
 
         let serialize;
-        console.log(response, 'response')
         if (response.to) {
           let fromTo;
           let to;
-          await getCoordinates(response.from).then(response => fromTo = response).catch(() => fromTo = null);
-          await getCoordinates(response.to).then(response => to = response).catch(() => to = null);
+          await getCoordinates(responseFrom).then(response => fromTo = response).catch(() => fromTo = null);
+          await getCoordinates(responseTo).then(response => to = response).catch(() => to = null);
           serialize = `
         ${access_key && `access_key=${access_key}`}
-        ${fromTo.lat && `&from_latitude=${fromTo.lat}`}
-        ${fromTo.lng && `&from_longitude=${fromTo.lng}`}
-        ${to.lat && `&to_latitude=${to.lat}`}
-        ${to.lng && `&to_longitude=${to.lng}`}
+        ${fromTo && fromTo.lat && `&from_latitude=${fromTo.lat}`}
+        ${fromTo && fromTo.lng && `&from_longitude=${fromTo.lng}`}
+        ${to && to.lat && `&to_latitude=${to.lat}`}
+        ${to && to.lng && `&to_longitude=${to.lng}`}
         ${response.at && `&at=${response.at}`}
         ${response.luggage.bicycle && `&bicycle=${response.luggage.bicycle}`}
         ${response.luggage.child_seat && `&child_seat=${response.luggage.child_seat}`}
@@ -96,11 +97,11 @@
         ${response.passengers.children && `&children=${response.passengers.children}`}`;
         } else if (response.from) {
           let fromDuration;
-          await getCoordinates(response.from).then(response => fromDuration = response).catch(() => fromDuration = null);
+          await getCoordinates(responseFrom).then(response => fromDuration = response).catch(() => fromDuration = null);
           serialize = `
         ${access_key && `access_key=${access_key}`}
-        ${fromDuration.lat && `&from_latitude=${fromDuration.lat}`}
-        ${fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
+        ${fromDuration && fromDuration.lat && `&from_latitude=${fromDuration.lat}`}
+        ${fromDuration && fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
         ${response.duration && `&duration=${response.duration}`}
         ${response.at && `&at=${response.at}`}
         ${response.luggage.bicycle && `&bicycle=${response.luggage.bicycle}`}
@@ -110,7 +111,7 @@
         ${response.luggage.skis && `&skis=${response.luggage.skis}`}
         ${response.luggage.snowboard && `&snowboard=${response.luggage.snowboard}`}
         ${response.luggage.suitcase && `&suitcase=${response.luggage.suitcase}`}
-        ${response.luggage.wheechair && `&wheelchair=${response.luggage.wheechair}`}
+        ${response.luggage.wheelchair && `&wheelchair=${response.luggage.wheelchair}`}
         ${response.passengers.adult && `&adult=${response.passengers.adult}`}
         ${response.passengers.animal_0_8 && `&animal_0_8=${response.passengers.animal_0_8}`}
         ${response.passengers.animal_8_20 && `&animal_8_20=${response.passengers.animal_8_20}`}
@@ -118,6 +119,11 @@
         }
         const serializeIsTrim = serialize.replace(/\s/g, '');
         orderInfo.prop('href', `/order-edit?${serializeIsTrim}`)
+
+        // hide edit/cancel buttons
+        if (response['order_status'][language] === 'Отменено') {
+          $('.buttons-wrapper').remove();
+        }
       }
     })
     .catch(error => console.log(error, '/orders/info'));
@@ -137,7 +143,7 @@
         if (response.code === 0) {
           console.error(JSON.parse(response.message).error.message, 'orders/cancel error')
         } else {
-          window.location.href = `/order-cancellation-sucess?access_key=${response.order_number}`
+          window.location.href = `/order-cancellation-sucess?order-number=${response.order_number}`
         }
       })
   });
