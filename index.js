@@ -1,5 +1,5 @@
 // Footer Code
-(function () {
+(async function () {
   // begin: logic for form
   const carImages = {
     STANDARD: "https://uploads-ssl.webflow.com/6305669d3fbd4aaf2734fe5f/63077f9925588b3ca95519cd_Rectangle%2010-3-min.png",
@@ -89,6 +89,8 @@
             } else if (response.length > 0) {
               errorMessage.css('display', 'none');
               findCars.css('display', 'block');
+              $('.contact-form-wrapper').css('display', 'block');
+
               // set title
               findCarsTitle.children().remove();
               findCarsTitle.html(`<h2><span class="grey-span">Мы нашли</span> ${response.length} варианта <span class="grey-span">авто для вашей поездки</span></h2>`);
@@ -119,7 +121,7 @@
     }
 
     const setFields = async () => {
-      const adults = $('[name="Passengers-Adults"]')
+      const adults = $('[name="Passengers-Adults"]');
       adults.val(1);
 
       const urlParams = new URLSearchParams(window.location.search);
@@ -158,7 +160,7 @@
         }
 
         // set other fields
-        adults.val(urlParams.get('adult'));
+        if (urlParams.get('adult')) adults.val(urlParams.get('adult'));
         $('[name="Passengers-Kids"]').val(urlParams.get('children'));
         $('[name="Passengers-Pets-8-Kg"]').val(urlParams.get('animal_0_8'));
         $('[name="Passengers-Pets-20-Kg"]').val(urlParams.get('animal_8_20'));
@@ -203,6 +205,7 @@
         } else {
           $('.error-message-second').css('display', 'block');
           $('.finded-cars').css('display', 'none');
+          $('.contact-form-wrapper').css('display', 'none');
         }
         // end check if form is empty
       }
@@ -262,8 +265,8 @@
         const toInput = $('[name="to"]').val();
         await getCoordinates(toInput).then(response => to = response).catch(() => to = null);
         await getCoordinates(fromToInput).then(response => fromTo = response).catch(() => fromTo = null);
-        data.from = {"longitude": fromTo.lng, "latitude": fromTo.lat};
-        data.to = {"longitude": to.lng, "latitude": to.lat};
+        data.from = {"longitude": `${fromTo.lng}`, "latitude": `${fromTo.lat}`};
+          data.to = {"longitude": `${to.lng}`, "latitude": `${to.lat}`};
         serialize = `
         ${fromTo.lat && `from_latitude=${fromTo.lat}`}
         ${fromTo.lng && `&from_longitude=${fromTo.lng}`}
@@ -322,8 +325,8 @@
     }
 
     // on submit form
-    $('._wf-form').submit(function () {
-      initForm();
+    $('._wf-form').submit(async function () {
+      await initForm();
     });
 
     // plus/minus buttons
@@ -385,9 +388,9 @@
       connection[3].checked && preferredConnection.push('TELEGRAM');
       const language = $('.language-js input');
       const preferredLanguage = [];
-      language[0].checked && preferredLanguage.push('English');
-      language[1].checked && preferredLanguage.push('Русский');
-      language[2].checked && preferredLanguage.push('Slovaščina');
+      language[0].checked && preferredLanguage.push('en');
+      language[1].checked && preferredLanguage.push('ru');
+      language[2].checked && preferredLanguage.push('sk');
       const selectedCarName = $('[name="car-item"]').val();
 
       const createOrder = {
