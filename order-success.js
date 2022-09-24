@@ -1,7 +1,6 @@
-<!-- Заявка отправлена -->
-<!-- https://viptes-com.webflow.io/order-success?access_key={access_key} -->
-
-<script>
+//  Заявка отправлена
+// https://viptes-com.webflow.io/order-success?access_key={access_key}
+(function () {
   const urlParams = new URLSearchParams(window.location.search);
   const access_key = urlParams.get('access_key');
 
@@ -21,4 +20,4 @@
         $('.order-number').text(`№${response.order_number}`);
       }
     })
-</script>
+})();

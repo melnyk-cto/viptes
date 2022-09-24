@@ -1,7 +1,7 @@
-<!-- Проверка заявки -->
-<!-- https://viptes-com.webflow.io/order/info?access_key={access_key}-->
+// Проверка заявки
+// https://viptes-com.webflow.io/order/info?access_key={access_key}
 
-<script>
+(function () {
   const urlParams = new URLSearchParams(window.location.search);
   const access_key = urlParams.get('access_key');
 
@@ -131,4 +131,4 @@
         }
       })
   });
-</script>
+})();
