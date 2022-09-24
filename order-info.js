@@ -33,7 +33,14 @@
         $('.order-status-type').text(response['order_status'][language]);
         $('.payment-type').text(response.payment_type[language]);
         $('.order-from').text(responseFrom);
-        $('.order-to').text(responseTo);
+
+        if (responseTo) {
+          $('.order-to').text(responseTo);
+        } else {
+          $('.no-shrink').remove();
+          $('.order-to').text('');
+        }
+
         $('.car-type').text(response.car.type);
         $('.order-passengers').text(response.passengers.adult);
 

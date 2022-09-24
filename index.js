@@ -240,8 +240,8 @@
       let serialize;
 
       const data = {
-        "from": {"longitude": '', "latitude": ''},
-        "to": {"longitude": '', "latitude": ''},
+        "from": {},
+        "to": {},
         "duration": 0,
         "at": at,
         "passengers": {
