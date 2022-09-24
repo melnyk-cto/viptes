@@ -78,7 +78,6 @@
             console.error(JSON.parse(response.message).error.message, 'orders/estimate error')
           } else {
             $('.error-message-second').css('display', 'none');
-            console.log(response, 'getCars');
             const findCarsTitle = $(".finded-cars h2");
             const orderCars = $(".order-cars-div");
             const errorMessage = $('.error-message');
@@ -120,6 +119,9 @@
     }
 
     const setFields = async () => {
+      const adults = $('[name="Passengers-Adults"]')
+      adults.val(1);
+
       const urlParams = new URLSearchParams(window.location.search);
 
       if (window.location.pathname.includes('order/create') || window.location.pathname.includes('order-edit')) {
@@ -156,7 +158,7 @@
         }
 
         // set other fields
-        $('[name="Passengers-Adults"]').val(urlParams.get('adult'));
+        adults.val(urlParams.get('adult'));
         $('[name="Passengers-Kids"]').val(urlParams.get('children'));
         $('[name="Passengers-Pets-8-Kg"]').val(urlParams.get('animal_0_8'));
         $('[name="Passengers-Pets-20-Kg"]').val(urlParams.get('animal_8_20'));
@@ -196,10 +198,7 @@
             formIsFill = false;
           }
         });
-        console.log(formIsFill, 'formIsFill');
-
         if (formIsFill) {
-          console.log(333333);
           await initForm();
         } else {
           $('.error-message-second').css('display', 'block');
@@ -263,12 +262,8 @@
         const toInput = $('[name="to"]').val();
         await getCoordinates(toInput).then(response => to = response).catch(() => to = null);
         await getCoordinates(fromToInput).then(response => fromTo = response).catch(() => fromTo = null);
-        // TODO: need remove
-        data.from = {"longitude": "48.17553027190856", "latitude": "17.209788066750914"};
-        // data.from = {"longitude": fromTo.lng, "latitude": fromTo.lat};
-        // TODO: need remove
-        data.to = {"longitude": "48.17553027190856", "latitude": "17.209788066750914"};
-        // data.to = {"longitude": to.lng, "latitude": to.lat};
+        data.from = {"longitude": fromTo.lng, "latitude": fromTo.lat};
+        data.to = {"longitude": to.lng, "latitude": to.lat};
         serialize = `
         ${fromTo.lat && `from_latitude=${fromTo.lat}`}
         ${fromTo.lng && `&from_longitude=${fromTo.lng}`}
@@ -335,7 +330,24 @@
     $('.minus-js').on('click', function () {
       const input = $(this).parent().children('input');
       input.val(+input.val() - 1);
-      if (input.val() <= 0) input.val(0)
+      if ($(this).parent().children('input').attr('name') === 'Passengers-Adults') {
+        if (input.val() <= 1) input.val(1)
+      } else {
+        if (input.val() <= 0) input.val(0)
+      }
+    });
+
+    // show/hide airport field
+    $('[name="airport-meet-me"]').on('change', function () {
+      if ($(this).is(':checked')) {
+        $('.airport-company-field').css('display', 'flex');
+        $('.airport-meet-information').css('display', 'flex');
+        $('[name="flight-number"]').prop('required', true);
+      } else {
+        $('.airport-company-field').css('display', 'none');
+        $('.airport-meet-information').css('display', 'none');
+        $('[name="flight-number"]').prop('required', false);
+      }
     });
 
     $('.plus-js').on('click', function () {
@@ -361,16 +373,16 @@
       const surnameInput = $('[name="Surname"]').val();
       const emailInput = $('[name="Email"]').val();
       const phoneInput = $('[name="Phone"]').val();
-      //  const paymentMethodInput = $('[name="payment-method"]').val();
+      const paymentMethodInput = $('[name="payment-method"]').val();
       const airlineInput = $('[name="aviacompany"]').val();
       const flightNumberInput = $('[name="flight-number"]').val();
       const airportMeetMeInput = $('[name="airport-meet-me"]')[0].checked;
       const connection = $('.connection-js input');
       const preferredConnection = [];
-      connection[0].checked && preferredConnection.push('Email');
-      connection[1].checked && preferredConnection.push('WhatsApp');
-      connection[2].checked && preferredConnection.push('Phone');
-      connection[3].checked && preferredConnection.push('Telegram');
+      connection[0].checked && preferredConnection.push('EMAIL');
+      connection[1].checked && preferredConnection.push('WHATSAPP');
+      connection[2].checked && preferredConnection.push('PHONE');
+      connection[3].checked && preferredConnection.push('TELEGRAM');
       const language = $('.language-js input');
       const preferredLanguage = [];
       language[0].checked && preferredLanguage.push('English');
@@ -385,19 +397,13 @@
         "lname": surnameInput,
         "phone": phoneInput,
         "email": emailInput,
-        "preferred_connection": ["TELEGRAM"],
-        // TODO: need fix
-        // "preferred_connection": preferredConnection,
+        "preferred_connection": preferredConnection,
         "preferred_language": preferredLanguage,
         "airline": airlineInput,
         "flight_number": flightNumberInput,
-        "payment_type": "CARD FOR DRIVER",
-        // TODO: need fix
-        // "payment_type": paymentMethodInput,
+        "payment_type": paymentMethodInput,
         "airport_pick_up": airportMeetMeInput,
       };
-
-      console.log(createOrder, 'createOrder');
 
       let url = '';
       let type = '';
@@ -415,7 +421,7 @@
       // get cars API
       fetch(url, {
         method: method,
-
+        body: JSON.stringify(createOrder)
       })
         .then(response => response.json())
         .then(response => {
