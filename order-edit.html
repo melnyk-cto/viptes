@@ -1,0 +1,107 @@
+<!-- Редактирование бронирования -->
+<!-- https://viptes-com.webflow.io/order-edit?access_key={access_key} -->
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const access_key = urlParams.get('access_key');
+
+
+  const getCoordinates = async (address) => {
+    const geocoder = new google.maps.Geocoder();
+    let coordinates;
+    await geocoder.geocode({"address": address}, function (results) {
+      if (results) {
+        coordinates = {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()};
+      }
+    });
+    return coordinates;
+  }
+
+
+  const setAllFields = (response) => {
+    $('.order-number').text(`№${response.order_number}`);
+
+    if (response.duration) {
+      $('.location-from-to').remove();
+    } else {
+      $('.location-from').remove();
+      $('.location-input.hours').remove();
+    }
+
+    // set other fields
+    $('[name="from-duration"]').val(response.from);
+    $('[name="from-to"]').val(response.from);
+    $('[name="to"]').val(response.to);
+    $('[name="Hours"]').val(response.duration);
+    $('[name="Passengers-Adults"]').val(response.passengers.adult);
+    $('[name="Passengers-Kids"]').val(response.passengers.children);
+    $('[name="Passengers-Pets-8-Kg"]').val(response.passengers.animal_0_8);
+    $('[name="Passengers-Pets-20-Kg"]').val(response.passengers.animal_8_20);
+    $('[name="Hand-Luggage-20"]').val(response.luggage.hand_luggage);
+    $('[name="Skis"]').val(response.luggage.skis);
+    $('[name="Golf-Bag"]').val(response.luggage.golf_bag);
+    $('[name="Snowboard"]').val(response.luggage.snowboard);
+    $('[name="Bike"]').val(response.luggage.bicycle);
+    $('[name="Wheelchair"]').val(response.luggage.wheechair);
+    $('[name="Child-Chair"]').val(response.luggage.child_seat);
+    $('[name="Luggage-30-Kg"]').val(response.luggage.suitcase);
+
+    if (response.at) {
+      const myDate = new Date(response.at);
+      const date = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+      const time = `${('0' + myDate.getHours()).slice(-2)}:${('0' + myDate.getMinutes()).slice(-2)}`
+      $('[name="date"]').val(date);
+      $('[name="appt"]').val(time);
+    }
+
+    $('[name="Name"]').val(response.fname);
+    $('[name="Surname"]').val(response.lname);
+    $('[name="Email"]').val(response.email);
+    $('[name="Phone"]').val(response.phone);
+    $('[name="payment-method"]').val(response.payment_type['ru']);
+    $('.price-js').text(response.car.price);
+
+    for (let i = 0; i < response.preferred_connection.length; i++) {
+      const preferredConnection = $(`.preferred_connection[data-value='${response.preferred_connection}']`);
+      preferredConnection.children('.w-checkbox-input').addClass('w--redirected-checked');
+      preferredConnection.children('input').prop('checked', true);
+    }
+
+    for (let i = 0; i < response.preferred_language.length; i++) {
+      const preferredLanguage = $(`.preferred_language[data-value='${response.preferred_language}']`);
+      preferredLanguage.children('.w-checkbox-input').addClass('w--redirected-checked');
+      preferredLanguage.children('input').prop('checked', true);
+    }
+
+    $('[name="aviacompany"]').val(response.airline);
+    $('[name="flight-number"]').val(response.flight_number);
+
+    const airport_pick_up = $(`.airport_pick_up`);
+    if (response.airport_pick_up) {
+      airport_pick_up.children('.w-checkbox-input').addClass('w--redirected-checked');
+      airport_pick_up.children('input').prop('checked', true);
+    } else {
+      airport_pick_up.children('.w-checkbox-input').removeClass('w--redirected-checked');
+      airport_pick_up.children('input').prop('checked', false);
+    }
+  }
+
+  // get order info API
+  fetch(`https://homelyactor.backendless.app/api/services/viptes/orders/info?access_key=${access_key}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then(async response => {
+      console.log(response, 'orders/info');
+
+      // get cars
+      let fromTo;
+      let to;
+      await getCoordinates(response.from).then(response => to = response).catch(() => to = null);
+      await getCoordinates(response.to).then(response => fromTo = response).catch(() => fromTo = null);
+
+      // set fields
+      setAllFields(response);
+    });
+
+</script>
