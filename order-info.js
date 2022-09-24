@@ -56,14 +56,14 @@
 
         // luggage
         const luggage = response.luggage;
-        const newLuggage = (luggage.bicycle && `Велосипед - ${luggage.bicycle}, `) +
-          (luggage.child_seat && `Детское кресло - ${luggage.child_seat}, `) +
-          (luggage.golf_bag && `Сумка для гольфа - ${luggage.golf_bag}, `) +
-          (luggage.hand_luggage && `Ручная кладь - ${luggage.hand_luggage}, `) +
-          (luggage.snowboard && `Сноуборд - ${luggage.snowboard}, `) +
-          (luggage.suitcase && `Чемодан/сумка - ${luggage.suitcase}, `) +
-          (luggage.wheelchair && `Инвалидное кресло - ${luggage.wheelchair}, `) +
-          (luggage.skis && `Лыжи - ${luggage.skis}`)
+        const newLuggage = (luggage.bicycle ? `Велосипед - ${luggage.bicycle}, ` : '') +
+          (luggage.child_seat ? `Детское кресло - ${luggage.child_seat}, ` : '') +
+          (luggage.golf_bag ? `Сумка для гольфа - ${luggage.golf_bag}, ` : '') +
+          (luggage.hand_luggage ? `Ручная кладь - ${luggage.hand_luggage}, ` : '') +
+          (luggage.snowboard ? `Сноуборд - ${luggage.snowboard}, ` : '') +
+          (luggage.suitcase ? `Чемодан/сумка - ${luggage.suitcase}, ` : '') +
+          (luggage.wheelchair ? `Инвалидное кресло - ${luggage.wheelchair}, ` : '') +
+          (luggage.skis ? `Лыжи - ${luggage.skis}` : '')
         $('.order-luggage').text(newLuggage);
 
         // set url for link
@@ -143,7 +143,7 @@
         if (response.code === 0) {
           console.error(JSON.parse(response.message).error.message, 'orders/cancel error')
         } else {
-          window.location.href = `/order-cancellation-sucess?order-number=${response.order_number}`
+          window.location.href = `/order-cancellation-success?order-number=${response.order_number}`
         }
       })
   });

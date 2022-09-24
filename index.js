@@ -245,20 +245,20 @@
         "duration": 0,
         "at": at,
         "passengers": {
-          "adult": adultsInput,
-          "children": kidsInput,
-          "animal_0_8": pets8Input,
-          "animal_8_20": pets20Input
+          "adult": Number(adultsInput),
+          "children": Number(kidsInput),
+          "animal_0_8": Number(pets8Input),
+          "animal_8_20": Number(pets20Input)
         },
         "luggage": {
-          "skis": skisInput,
-          "hand_luggage": handLuggageInput,
-          "bicycle": bikeInput,
-          "child_seat": childChairInput,
-          "golf_bag": golfInput,
-          "snowboard": snowboardInput,
-          "suitcase": luggage30Input,
-          "wheelchair": wheelchairInput
+          "skis": Number(skisInput),
+          "hand_luggage": Number(handLuggageInput),
+          "bicycle": Number(bikeInput),
+          "child_seat": Number(childChairInput),
+          "golf_bag": Number(golfInput),
+          "snowboard": Number(snowboardInput),
+          "suitcase": Number(luggage30Input),
+          "wheelchair": Number(wheelchairInput)
         }
       }
 
