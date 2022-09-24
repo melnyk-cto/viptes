@@ -1,6 +1,6 @@
-<!--Footer Code-->
+// Footer Code
 
-<!-- begin: google maps -->
+// begin: google maps
 function initialize() {
   const fromInput = $('[name="from-to"]');
   const durationInput = $('[name="from-duration"]');
@@ -12,4 +12,4 @@ function initialize() {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
-<!-- end: google maps -->
+// end: google maps

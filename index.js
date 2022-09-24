@@ -1,5 +1,5 @@
-<!--Footer Code-->
-<!-- begin: logic for form -->
+// Footer Code
+// begin: logic for form
 const carImages = {
   STANDARD: "https://uploads-ssl.webflow.com/6305669d3fbd4aaf2734fe5f/63077f9925588b3ca95519cd_Rectangle%2010-3-min.png",
   BUSINESS: "https://uploads-ssl.webflow.com/6305669d3fbd4aaf2734fe5f/63077f996187bf4336c807e0_Rectangle%2010-2-min.png",
@@ -428,5 +428,4 @@ $(document).ready(function () {
   });
 
 });
-
-<!-- end: logic for form -->
+// end: logic for form
