@@ -118,10 +118,8 @@
         ${response.phone ? `&phone=${response.phone}` : ''}
         ${response.airport_pick_up ? `&airport_pick_up=${response.airport_pick_up}` : ''}
         ${response.airline ? `&airline=${response.airline}` : ''}
-        ${response.airline ? `&airline=${response.airline}` : ''}
-        ${response.airline ? `&airline=${response.airline}` : ''}
+        ${response.flight_number ? `&flight_number=${response.flight_number}` : ''}
         ${response.order_number ? `&order_number=${response.order_number}` : ''}
-        ${response.car.car_name ? `&car_name=${response.car.car_name}` : ''}
         ${response.car.car_name ? `&car_name=${response.car.car_name}` : ''}
         ${response.preferred_connection ? `&preferred_connection=${response.preferred_connection}` : ''}
         ${response.payment_type[language] ? `&payment_type=${response.payment_type[language]}` : ''}

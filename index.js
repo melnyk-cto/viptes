@@ -180,6 +180,13 @@
         $('[name="Wheelchair"]').val(urlParams.get('wheelchair'));
         $('[name="Child-Chair"]').val(urlParams.get('child_seat'));
         $('[name="Luggage-30-Kg"]').val(urlParams.get('suitcase'));
+        $('[name="Name"]').val(urlParams.get('fname'));
+        $('[name="Surname"]').val(urlParams.get('lname'));
+        $('[name="Email"]').val(urlParams.get('email'));
+        $('[name="Phone"]').val(urlParams.get('phone'));
+        $('[name="aviacompany"]').val(urlParams.get('airline'));
+        $('[name="flight-number"]').val(urlParams.get('flight_number'));
+        $('.order-number').text(`№${urlParams.get('order_number')}`);
       }
 
       // set to on pages when we have coordinates
