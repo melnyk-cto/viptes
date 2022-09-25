@@ -111,7 +111,21 @@
         ${response.passengers.adult ? `&adult=${response.passengers.adult}` : ''}
         ${response.passengers.animal_0_8 ? `&animal_0_8=${response.passengers.animal_0_8}` : ''}
         ${response.passengers.animal_8_20 ? `&animal_8_20=${response.passengers.animal_8_20}` : ''}
-        ${response.passengers.children ? `&children=${response.passengers.children}` : ''}`
+        ${response.passengers.children ? `&children=${response.passengers.children}` : ''}
+        ${response.fname ? `&fname=${response.fname}` : ''}
+        ${response.lname ? `&lname=${response.lname}` : ''}
+        ${response.email ? `&email=${response.email}` : ''}
+        ${response.phone ? `&phone=${response.phone}` : ''}
+        ${response.airport_pick_up ? `&airport_pick_up=${response.airport_pick_up}` : ''}
+        ${response.airline ? `&airline=${response.airline}` : ''}
+        ${response.airline ? `&airline=${response.airline}` : ''}
+        ${response.airline ? `&airline=${response.airline}` : ''}
+        ${response.order_number ? `&order_number=${response.order_number}` : ''}
+        ${response.car.car_name ? `&car_name=${response.car.car_name}` : ''}
+        ${response.car.car_name ? `&car_name=${response.car.car_name}` : ''}
+        ${response.preferred_connection ? `&preferred_connection=${response.preferred_connection}` : ''}
+        ${response.payment_type[language] ? `&payment_type=${response.payment_type[language]}` : ''}
+        `
 
         const serializeIsTrim = serialize.replace(/\s/g, '');
         orderInfo.prop('href', `/order-edit?${serializeIsTrim}`)

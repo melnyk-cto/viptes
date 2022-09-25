@@ -1,5 +1,13 @@
 // Footer Code
 (async function () {
+  const setUrlKey = (url, key, value) => {
+    if (value && value !== '0') {
+      url.searchParams.set(key, value);
+    } else {
+      url.searchParams.delete(key);
+    }
+  }
+
   // begin: logic for form
   const carImages = {
     STANDARD: "https://uploads-ssl.webflow.com/6305669d3fbd4aaf2734fe5f/63077f9925588b3ca95519cd_Rectangle%2010-3-min.png",
@@ -237,7 +245,6 @@
       // detect form&to of from&direction
       const fromToInput = $('[name="from-to"]').val();
       const fromDurationInput = $('[name="from-duration"]').val();
-      let serialize;
 
       const data = {
         "from": {},
@@ -262,6 +269,7 @@
         }
       }
 
+      const url = new URL(window.location.href);
       if (fromToInput) {
         let fromTo;
         let to;
@@ -270,48 +278,46 @@
         await getCoordinates(fromToInput).then(response => fromTo = response).catch(() => fromTo = null);
         data.from = {"longitude": `${fromTo.lng}`, "latitude": `${fromTo.lat}`};
         data.to = {"longitude": `${to.lng}`, "latitude": `${to.lat}`};
-        serialize = `
-        ${fromTo.lat && `from_latitude=${fromTo.lat}`}
-        ${fromTo.lng && `&from_longitude=${fromTo.lng}`}
-        ${to.lat && `&to_latitude=${to.lat}`}
-        ${to.lng && `&to_longitude=${to.lng}`}`;
+        setUrlKey(url, 'from_latitude', fromTo.lat);
+        setUrlKey(url, 'from_longitude', fromTo.lng);
+        setUrlKey(url, 'to_latitude', to.lat);
+        setUrlKey(url, 'to_longitude', to.lng);
       } else if (fromDurationInput) {
         let fromDuration;
         const durationInput = $('[name="Hours"]').val();
         await getCoordinates(fromDurationInput).then(response => fromDuration = response).catch(() => fromDuration = null);
         data.from = {"longitude": fromDuration.lng, "latitude": fromDuration.lat};
         data.duration = Number(durationInput);
-        serialize = `
-        ${fromDuration.lat && `from_latitude=${fromDuration.lat}`}
-        ${fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
-        ${durationInput && `&duration=${durationInput}`}`;
+        setUrlKey(url, 'from_latitude', fromDuration.lat);
+        setUrlKey(url, 'from_longitude', fromDuration.lng);
+        setUrlKey(url, 'duration', durationInput);
       }
-      serialize += `
-        ${at && `&at=${at}`}
-        ${bikeInput && `&bicycle=${bikeInput}`}
-        ${childChairInput && `&child_seat=${childChairInput}`}
-        ${golfInput && `&golf_bag=${golfInput}`}
-        ${handLuggageInput && `&hand_luggage=${handLuggageInput}`}
-        ${skisInput && `&skis=${skisInput}`}
-        ${snowboardInput && `&snowboard=${snowboardInput}`}
-        ${luggage30Input && `&suitcase=${luggage30Input}`}
-        ${wheelchairInput && `&wheelchair=${wheelchairInput}`}
-        ${adultsInput && `&adult=${adultsInput}`}
-        ${pets8Input && `&animal_0_8=${pets8Input}`}
-        ${pets20Input && `&animal_8_20=${pets20Input}`}
-        ${kidsInput && `&children=${kidsInput}`}`
-      const serializeIsTrim = serialize.replace(/\s/g, '');
-      return {data, serializeIsTrim}
+      setUrlKey(url, 'at', at);
+      setUrlKey(url, 'bicycle', bikeInput);
+      setUrlKey(url, 'child_seat', childChairInput);
+      setUrlKey(url, 'golf_bag', golfInput);
+      setUrlKey(url, 'hand_luggage', handLuggageInput);
+      setUrlKey(url, 'skis', skisInput);
+      setUrlKey(url, 'snowboard', snowboardInput);
+      setUrlKey(url, 'suitcase', luggage30Input);
+      setUrlKey(url, 'wheelchair', wheelchairInput);
+      setUrlKey(url, 'adult', adultsInput);
+      setUrlKey(url, 'animal_0_8', pets8Input);
+      setUrlKey(url, 'animal_8_20', pets20Input);
+      setUrlKey(url, 'children', kidsInput);
+
+      // update url
+      const newUrl = window.location.pathname + `?${url.searchParams}`;
+      window.history.pushState({path: newUrl}, '', newUrl);
+
+      return {data}
     }
     const initForm = async () => {
-      const {data, serializeIsTrim} = await getAllFields();
-      if (window.location.href.includes('order/create') || window.location.pathname.includes('order-edit')) {
-        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?${serializeIsTrim}`;
-        window.history.pushState({path: newUrl}, '', newUrl);
-      } else {
-        window.location.href = `/order/create?${serializeIsTrim}`
+      const {data} = await getAllFields();
+      if (!window.location.href.includes('order/create') && !window.location.pathname.includes('order-edit')) {
+        const url = new URL(window.location.href);
+        window.location.href = `/order/create?${url.searchParams}`;
       }
-
       getCars(data);
     }
 
