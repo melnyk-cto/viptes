@@ -140,8 +140,7 @@
   $('.call-to-manager').on('click', function (e) {
     e.preventDefault();
     // get order cancel API
-    // TODO: need change "access_key" to dynamic
-    fetch(`https://homelyactor.backendless.app/api/services/viptes/orders/cancel?access_key=recUHhidiKv1U83FO`, {
+    fetch(`https://homelyactor.backendless.app/api/services/viptes/orders/cancel`, {
       method: 'PUT',
       body: JSON.stringify({"access_key": access_key})
     })
