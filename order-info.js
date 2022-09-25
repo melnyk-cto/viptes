@@ -84,46 +84,35 @@
           await getCoordinates(responseFrom).then(response => fromTo = response).catch(() => fromTo = null);
           await getCoordinates(responseTo).then(response => to = response).catch(() => to = null);
           serialize = `
-        ${access_key && `access_key=${access_key}`}
-        ${fromTo && fromTo.lat && `&from_latitude=${fromTo.lat}`}
-        ${fromTo && fromTo.lng && `&from_longitude=${fromTo.lng}`}
-        ${to && to.lat && `&to_latitude=${to.lat}`}
-        ${to && to.lng && `&to_longitude=${to.lng}`}
-        ${response.at && `&at=${response.at}`}
-        ${response.luggage.bicycle && `&bicycle=${response.luggage.bicycle}`}
-        ${response.luggage.child_seat && `&child_seat=${response.luggage.child_seat}`}
-        ${response.luggage.golf_bag && `&golf_bag=${response.luggage.golf_bag}`}
-        ${response.luggage.hand_luggage && `&hand_luggage=${response.luggage.hand_luggage}`}
-        ${response.luggage.skis && `&skis=${response.luggage.skis}`}
-        ${response.luggage.snowboard && `&snowboard=${response.luggage.snowboard}`}
-        ${response.luggage.suitcase && `&suitcase=${response.luggage.suitcase}`}
-        ${response.luggage.wheechair && `&wheelchair=${response.luggage.wheechair}`}
-        ${response.passengers.adult && `&adult=${response.passengers.adult}`}
-        ${response.passengers.animal_0_8 && `&animal_0_8=${response.passengers.animal_0_8}`}
-        ${response.passengers.animal_8_20 && `&animal_8_20=${response.passengers.animal_8_20}`}
-        ${response.passengers.children && `&children=${response.passengers.children}`}`;
+          ${access_key && `access_key=${access_key}`}
+          ${(fromTo && fromTo.lat) ? `&from_latitude=${fromTo.lat}` : ''}
+          ${(fromTo && fromTo.lng) ? `&from_longitude=${fromTo.lng}` : ''}
+          ${(to && to.lat) ? `&to_latitude=${to.lat}` : ''}
+          ${(to && to.lng) ? `&to_longitude=${to.lng}` : ''}`;
         } else if (response.from) {
           let fromDuration;
           await getCoordinates(responseFrom).then(response => fromDuration = response).catch(() => fromDuration = null);
           serialize = `
-        ${access_key && `access_key=${access_key}`}
-        ${fromDuration && fromDuration.lat && `&from_latitude=${fromDuration.lat}`}
-        ${fromDuration && fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
-        ${response.duration && `&duration=${response.duration}`}
-        ${response.at && `&at=${response.at}`}
-        ${response.luggage.bicycle && `&bicycle=${response.luggage.bicycle}`}
-        ${response.luggage.child_seat && `&child_seat=${response.luggage.child_seat}`}
-        ${response.luggage.golf_bag && `&golf_bag=${response.luggage.golf_bag}`}
-        ${response.luggage.hand_luggage && `&hand_luggage=${response.luggage.hand_luggage}`}
-        ${response.luggage.skis && `&skis=${response.luggage.skis}`}
-        ${response.luggage.snowboard && `&snowboard=${response.luggage.snowboard}`}
-        ${response.luggage.suitcase && `&suitcase=${response.luggage.suitcase}`}
-        ${response.luggage.wheelchair && `&wheelchair=${response.luggage.wheelchair}`}
-        ${response.passengers.adult && `&adult=${response.passengers.adult}`}
-        ${response.passengers.animal_0_8 && `&animal_0_8=${response.passengers.animal_0_8}`}
-        ${response.passengers.animal_8_20 && `&animal_8_20=${response.passengers.animal_8_20}`}
-        ${response.passengers.children && `&children=${response.passengers.children}`}`;
+          ${access_key && `access_key=${access_key}`}
+          ${fromDuration && fromDuration.lat && `&from_latitude=${fromDuration.lat}`}
+          ${fromDuration && fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
+          ${response.duration && `&duration=${response.duration}`}`;
         }
+        serialize += `
+        ${response.at ? `&at=${Date.parse(response.at)}` : ''}
+        ${response.luggage.bicycle ? `&bicycle=${response.luggage.bicycle}` : ''}
+        ${response.luggage.child_seat ? `&child_seat=${response.luggage.child_seat}` : ''}
+        ${response.luggage.golf_bag ? `&golf_bag=${response.luggage.golf_bag}` : ''}
+        ${response.luggage.hand_luggage ? `&hand_luggage=${response.luggage.hand_luggage}` : ''}
+        ${response.luggage.skis ? `&skis=${response.luggage.skis}` : ''}
+        ${response.luggage.snowboard ? `&snowboard=${response.luggage.snowboard}` : ''}
+        ${response.luggage.suitcase ? `&suitcase=${response.luggage.suitcase}` : ''}
+        ${response.luggage.wheelchair ? `&wheelchair=${response.luggage.wheelchair}` : ''}
+        ${response.passengers.adult ? `&adult=${response.passengers.adult}` : ''}
+        ${response.passengers.animal_0_8 ? `&animal_0_8=${response.passengers.animal_0_8}` : ''}
+        ${response.passengers.animal_8_20 ? `&animal_8_20=${response.passengers.animal_8_20}` : ''}
+        ${response.passengers.children ? `&children=${response.passengers.children}` : ''}`
+
         const serializeIsTrim = serialize.replace(/\s/g, '');
         orderInfo.prop('href', `/order-edit?${serializeIsTrim}`)
 

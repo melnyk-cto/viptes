@@ -274,20 +274,7 @@
         ${fromTo.lat && `from_latitude=${fromTo.lat}`}
         ${fromTo.lng && `&from_longitude=${fromTo.lng}`}
         ${to.lat && `&to_latitude=${to.lat}`}
-        ${to.lng && `&to_longitude=${to.lng}`}
-        ${at && `&at=${at}`}
-        ${bikeInput && `&bicycle=${bikeInput}`}
-        ${childChairInput && `&child_seat=${childChairInput}`}
-        ${golfInput && `&golf_bag=${golfInput}`}
-        ${handLuggageInput && `&hand_luggage=${handLuggageInput}`}
-        ${skisInput && `&skis=${skisInput}`}
-        ${snowboardInput && `&snowboard=${snowboardInput}`}
-        ${luggage30Input && `&suitcase=${luggage30Input}`}
-        ${wheelchairInput && `&wheelchair=${wheelchairInput}`}
-        ${adultsInput && `&adult=${adultsInput}`}
-        ${pets8Input && `&animal_0_8=${pets8Input}`}
-        ${pets20Input && `&animal_8_20=${pets20Input}`}
-        ${kidsInput && `&children=${kidsInput}`}`;
+        ${to.lng && `&to_longitude=${to.lng}`}`;
       } else if (fromDurationInput) {
         let fromDuration;
         const durationInput = $('[name="Hours"]').val();
@@ -297,7 +284,9 @@
         serialize = `
         ${fromDuration.lat && `from_latitude=${fromDuration.lat}`}
         ${fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
-        ${durationInput && `&duration=${durationInput}`}
+        ${durationInput && `&duration=${durationInput}`}`;
+      }
+      serialize += `
         ${at && `&at=${at}`}
         ${bikeInput && `&bicycle=${bikeInput}`}
         ${childChairInput && `&child_seat=${childChairInput}`}
@@ -310,8 +299,7 @@
         ${adultsInput && `&adult=${adultsInput}`}
         ${pets8Input && `&animal_0_8=${pets8Input}`}
         ${pets20Input && `&animal_8_20=${pets20Input}`}
-        ${kidsInput && `&children=${kidsInput}`}`;
-      }
+        ${kidsInput && `&children=${kidsInput}`}`
       const serializeIsTrim = serialize.replace(/\s/g, '');
       return {data, serializeIsTrim}
     }
