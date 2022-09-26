@@ -443,6 +443,8 @@
         method = 'POST'
       }
       if (window.location.pathname.includes('order-edit')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        createOrder.access_key = urlParams.get('access_key');
         url = 'https://homelyactor.backendless.app/api/services/viptes/orders/edit'
         type = 'orders/edit'
         method = 'PUT'
