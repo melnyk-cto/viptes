@@ -122,7 +122,8 @@
         ${response.order_number ? `&order_number=${response.order_number}` : ''}
         ${response.car.car_name ? `&car_name=${response.car.car_name}` : ''}
         ${response.preferred_connection ? `&preferred_connection=${response.preferred_connection}` : ''}
-        ${response.payment_type[language] ? `&payment_type=${response.payment_type[language]}` : ''}
+        ${response.preferred_language ? `&preferred_language=${response.preferred_language}` : ''}
+        ${response.payment_type['default'] ? `&payment_type=${response.payment_type['default'].replaceAll(' ', '_')}` : ''}
         `
 
         const serializeIsTrim = serialize.replace(/\s/g, '');

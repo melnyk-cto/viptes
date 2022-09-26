@@ -190,25 +190,46 @@
 
         const connection = $('.connection-js input');
         const connectionValue = urlParams.get('preferred_connection');
-        const input = $('.connection-js .w-checkbox-input');
-
+        const connectionInput = $('.connection-js .w-checkbox-input');
         // set preferred connection
-        if (connectionValue.includes('EMAIL')) {
-          connection[0].checked = true;
-          input[0].classList.add('w--redirected-checked');
+        if (connectionValue) {
+          if (connectionValue.includes('EMAIL')) {
+            connection[0].checked = true;
+            connectionInput[0].classList.add('w--redirected-checked');
+          }
+          if (connectionValue.includes('WHATSAPP')) {
+            connection[1].checked = true;
+            connectionInput[1].classList.add('w--redirected-checked');
+          }
+          if (connectionValue.includes('PHONE')) {
+            connection[2].checked = true;
+            connectionInput[2].classList.add('w--redirected-checked');
+          }
+          if (connectionValue.includes('TELEGRAM')) {
+            connection[3].checked = true;
+            connectionInput[3].classList.add('w--redirected-checked');
+          }
         }
-        if (connectionValue.includes('WHATSAPP')) {
-          connection[1].checked = true;
-          input[1].classList.add('w--redirected-checked');
+
+        const language = $('.language-js input');
+        const languageValue = urlParams.get('preferred_language');
+        const languageInput = $('.language-js .w-checkbox-input');
+        // set preferred language
+        if (languageValue) {
+          if (languageValue.includes('en')) {
+            language[0].checked = true;
+            languageInput[0].classList.add('w--redirected-checked');
+          }
+          if (languageValue.includes('ru')) {
+            language[1].checked = true;
+            languageInput[1].classList.add('w--redirected-checked');
+          }
+          if (languageValue.includes('sk')) {
+            language[2].checked = true;
+            languageInput[2].classList.add('w--redirected-checked');
+          }
         }
-        if (connectionValue.includes('PHONE')) {
-          connection[2].checked = true;
-          input[2].classList.add('w--redirected-checked');
-        }
-        if (connectionValue.includes('TELEGRAM')) {
-          connection[3].checked = true;
-          input[3].classList.add('w--redirected-checked');
-        }
+
       }
 
       // set to on pages when we have coordinates
@@ -402,7 +423,7 @@
       const surnameInput = $('[name="Surname"]').val();
       const emailInput = $('[name="Email"]').val();
       const phoneInput = $('[name="Phone"]').val();
-      const paymentMethodInput = $('[name="payment-method"]').val();
+      // const paymentMethodInput = $('[name="payment-method"]').val();
       const airlineInput = $('[name="aviacompany"]').val();
       const flightNumberInput = $('[name="flight-number"]').val();
       const airportMeetMeInput = $('[name="airport-meet-me"]')[0].checked;
@@ -430,7 +451,9 @@
         "preferred_language": preferredLanguage,
         "airline": airlineInput,
         "flight_number": flightNumberInput,
-        "payment_type": paymentMethodInput,
+        // TODO: need fix
+        "payment_type": 'CASH TO DRIVER',
+        // "payment_type": paymentMethodInput,
         "airport_pick_up": airportMeetMeInput,
       };
 
