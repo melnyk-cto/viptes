@@ -206,8 +206,7 @@
         $('[name="Surname"]').val(urlParams.get('lname'));
         $('[name="Email"]').val(urlParams.get('email'));
         $('[name="Phone"]').val(urlParams.get('phone'));
-        $('[name="aviacompany"]').val(urlParams.get('airline'));
-        $('[name="flight-number"]').val(urlParams.get('flight_number'));
+        $('[name="payment-method"]').val(urlParams.get('payment_type') && urlParams.get('payment_type').replaceAll('_', ' '));
         $('.order-number').text(`№${urlParams.get('order_number')}`);
 
         const connection = $('.connection-js input');
@@ -252,6 +251,21 @@
           }
         }
 
+        if (window.location.pathname.includes('order-edit')) {
+          const airport_pick_upUrl = urlParams.get('airport_pick_up');
+          const airport_pick_upInput = $('.airport_pick_up input');
+          const airport_pick_upCheckBox = $('.airport_pick_up .w-checkbox-input');
+          if (airport_pick_upUrl) {
+            $('[name="aviacompany"]').val('airline');
+            $('[name="flight-number"]').val('flight_number');
+          } else {
+            $('.airport-company-field').css('display', 'none');
+            $('.airport-meet-information').css('display', 'none');
+            $('[name="flight-number"]').prop('required', false);
+            airport_pick_upInput[0].checked = false;
+            airport_pick_upCheckBox[0].classList.remove('w--redirected-checked');
+          }
+        }
       }
 
       // set to on pages when we have coordinates
@@ -451,7 +465,7 @@
       const surnameInput = $('[name="Surname"]').val();
       const emailInput = $('[name="Email"]').val();
       const phoneInput = $('[name="Phone"]').val();
-      // const paymentMethodInput = $('[name="payment-method"]').val();
+      const paymentMethodInput = $('[name="payment-method"]').val();
       const airlineInput = $('[name="aviacompany"]').val();
       const flightNumberInput = $('[name="flight-number"]').val();
       const airportMeetMeInput = $('[name="airport-meet-me"]')[0].checked;
@@ -479,9 +493,7 @@
         "preferred_language": preferredLanguage,
         "airline": airlineInput,
         "flight_number": flightNumberInput,
-        // TODO: need fix
-        "payment_type": 'CASH TO DRIVER',
-        // "payment_type": paymentMethodInput,
+        "payment_type": paymentMethodInput,
         "airport_pick_up": airportMeetMeInput,
       };
 
