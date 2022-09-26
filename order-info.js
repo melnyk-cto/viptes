@@ -102,27 +102,26 @@
 
 
         let serialize;
-        if (response.to) {
+        if (response.duration) {
+          let fromDuration;
+          await getCoordinates(responseFrom).then(response => fromDuration = response).catch(() => fromDuration = null);
+          serialize = `
+          ${fromDuration ? fromDuration.lat && `&from_latitude=${fromDuration.lat}` : ''}
+          ${fromDuration ? fromDuration.lng && `&from_longitude=${fromDuration.lng}` : ''}
+          ${response.duration ? `&duration=${response.duration}` : ''}`;
+        } else if (response.from) {
           let fromTo;
           let to;
           await getCoordinates(responseFrom).then(response => fromTo = response).catch(() => fromTo = null);
           await getCoordinates(responseTo).then(response => to = response).catch(() => to = null);
           serialize = `
-          ${access_key && `access_key=${access_key}`}
           ${(fromTo && fromTo.lat) ? `&from_latitude=${fromTo.lat}` : ''}
           ${(fromTo && fromTo.lng) ? `&from_longitude=${fromTo.lng}` : ''}
           ${(to && to.lat) ? `&to_latitude=${to.lat}` : ''}
           ${(to && to.lng) ? `&to_longitude=${to.lng}` : ''}`;
-        } else if (response.from) {
-          let fromDuration;
-          await getCoordinates(responseFrom).then(response => fromDuration = response).catch(() => fromDuration = null);
-          serialize = `
-          ${access_key && `access_key=${access_key}`}
-          ${fromDuration && fromDuration.lat && `&from_latitude=${fromDuration.lat}`}
-          ${fromDuration && fromDuration.lng && `&from_longitude=${fromDuration.lng}`}
-          ${response.duration && `&duration=${response.duration}`}`;
         }
         serialize += `
+        ${access_key && `&access_key=${access_key}`}
         ${response.at ? `&at=${Date.parse(response.at)}` : ''}
         ${response.luggage.bicycle ? `&bicycle=${response.luggage.bicycle}` : ''}
         ${response.luggage.child_seat ? `&child_seat=${response.luggage.child_seat}` : ''}
