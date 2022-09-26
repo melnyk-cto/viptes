@@ -102,8 +102,6 @@
       })
         .then(response => response.json())
         .then(response => {
-          $('.loading-overlay').remove();
-
           if (response.code === 0) {
             console.error(JSON.parse(response.message).error.message, 'orders/estimate error')
           } else {
@@ -142,9 +140,11 @@
                 price.text($(this).attr('data-price'));
               });
             } else {
+              $('.contact-form-wrapper').css('display', 'none');
               errorMessage.css('display', 'block');
               findCars.css('display', 'none');
             }
+            $('.loading-overlay').remove();
           }
         })
         .catch(error => console.log(error, 'orders/estimate'))
@@ -266,6 +266,8 @@
       await setFields();
 
       if (window.location.pathname.includes('order/create') || window.location.pathname.includes('order-edit')) {
+        $('body').append(loading());
+
         // begin check if form is empty
         const inputs = $('._wf-form').serializeArray();
         let formIsFill = true;
@@ -286,6 +288,7 @@
           $('.error-message-second').css('display', 'block');
           $('.finded-cars').css('display', 'none');
           $('.contact-form-wrapper').css('display', 'none');
+          $('.loading-overlay').remove();
         }
         // end check if form is empty
       }
