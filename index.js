@@ -256,8 +256,8 @@
           const airport_pick_upInput = $('.airport_pick_up input');
           const airport_pick_upCheckBox = $('.airport_pick_up .w-checkbox-input');
           if (airport_pick_upUrl) {
-            $('[name="aviacompany"]').val('airline');
-            $('[name="flight-number"]').val('flight_number');
+            $('[name="aviacompany"]').val(urlParams.get('airline'));
+            $('[name="flight-number"]').val(urlParams.get('flight_number'));
           } else {
             $('.airport-company-field').css('display', 'none');
             $('.airport-meet-information').css('display', 'none');
