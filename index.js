@@ -187,6 +187,28 @@
         $('[name="aviacompany"]').val(urlParams.get('airline'));
         $('[name="flight-number"]').val(urlParams.get('flight_number'));
         $('.order-number').text(`№${urlParams.get('order_number')}`);
+
+        const connection = $('.connection-js input');
+        const connectionValue = urlParams.get('preferred_connection');
+        const input = $('.connection-js .w-checkbox-input');
+
+        // set preferred connection
+        if (connectionValue.includes('EMAIL')) {
+          connection[0].checked = true;
+          input[0].classList.add('w--redirected-checked');
+        }
+        if (connectionValue.includes('WHATSAPP')) {
+          connection[1].checked = true;
+          input[1].classList.add('w--redirected-checked');
+        }
+        if (connectionValue.includes('PHONE')) {
+          connection[2].checked = true;
+          input[2].classList.add('w--redirected-checked');
+        }
+        if (connectionValue.includes('TELEGRAM')) {
+          connection[3].checked = true;
+          input[3].classList.add('w--redirected-checked');
+        }
       }
 
       // set to on pages when we have coordinates
