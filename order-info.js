@@ -66,7 +66,7 @@
         }
 
         $('.car-type').text(response.car.type);
-        $('.order-passengers').text(response.passengers.adult);
+        $('.order-passengers').text(response.passengers_volume);
 
         if (response.duration) {
           $('.order-duration').text(response.duration);
@@ -94,8 +94,13 @@
           (luggage.snowboard ? `Сноуборд - ${luggage.snowboard}, ` : '') +
           (luggage.suitcase ? `Чемодан/сумка - ${luggage.suitcase}, ` : '') +
           (luggage.wheelchair ? `Инвалидное кресло - ${luggage.wheelchair}, ` : '') +
-          (luggage.skis ? `Лыжи - ${luggage.skis}` : '')
-        $('.order-luggage').text(newLuggage);
+          (luggage.skis ? `Лыжи - ${luggage.skis}, ` : '');
+
+        if (newLuggage) {
+          $('.order-luggage').text(newLuggage.slice(0, -2));
+        } else {
+          $('.order-luggage').text('-');
+        }
 
         // set url for link
         const orderInfo = $('.order-edit');

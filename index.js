@@ -365,8 +365,8 @@
         const toInput = $('[name="to"]').val();
         await getCoordinates(toInput).then(response => to = response).catch(() => to = null);
         await getCoordinates(fromToInput).then(response => fromTo = response).catch(() => fromTo = null);
-        data.from = {"longitude": `${fromTo.lng}`, "latitude": `${fromTo.lat}`};
-        data.to = {"longitude": `${to.lng}`, "latitude": `${to.lat}`};
+        data.from = {"longitude": fromTo.lng, "latitude": fromTo.lat};
+        data.to = {"longitude": to.lng, "latitude": to.lat};
         setUrlKey(url, 'from_latitude', fromTo.lat);
         setUrlKey(url, 'from_longitude', fromTo.lng);
         setUrlKey(url, 'to_latitude', to.lat);
