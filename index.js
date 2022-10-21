@@ -152,7 +152,9 @@
 
     const setFields = async () => {
       const adults = $('[name="Passengers-Adults"]');
+      const hours = $('[name="Hours"]');
       adults.val(1);
+      hours.val(4);
 
       const urlParams = new URLSearchParams(window.location.search);
 
@@ -166,7 +168,7 @@
             await getReverseGeocodingData(urlParams.get('from_latitude'), urlParams.get('from_longitude')).then(response => $('[name="from-duration"]').val(response));
           }
 
-          $('[name="Hours"]').val(urlParams.get('duration'));
+          hours.val(urlParams.get('duration'));
         } else {
           $('.location-from').remove();
           $('.location-input.hours').remove();
@@ -422,6 +424,8 @@
       input.val(+input.val() - 1);
       if ($(this).parent().children('input').attr('name') === 'Passengers-Adults') {
         if (input.val() <= 1) input.val(1)
+      } else if ($(this).parent().children('input').attr('name') === 'Hours') {
+        if (input.val() <= 4) input.val(4)
       } else {
         if (input.val() <= 0) input.val(0)
       }
